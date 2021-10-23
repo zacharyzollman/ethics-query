@@ -189,7 +189,7 @@ def bank_green_checker(entity):
 
 
 def bank_track_checker(entity):
-    entity = entity.replace("-", "_")
+    #entity = entity.replace("-", "_")
 
     company_url = "https://www.banktrack.org/company/" + entity
     bank_url = "https://www.banktrack.org/bank/" + entity
@@ -217,6 +217,24 @@ def bank_track_checker(entity):
         # example: https://www.banktrack.org/company/bunge/pdf
     return listed
 
+#https://www.gabv.org/members/bankmecu
+
+
+def gabv_checker(entity):
+    url = "https://www.gabv.org/members/" + entity
+    response = requests.get(url)
+    ## parse page text
+    response_parsed = BeautifulSoup(response.text, 'html.parser')
+    ## get cleaner text
+    text = response_parsed.get_text()
+    notfound = re.compile("404")
+    if notfound.search(text) != None:
+        listed = False
+    elif notfound.search(text) == None:
+        listed = True
+        print("👀 listed as a member of the Global Alliance for Banking on Values at " + url)
+    return listed
+
 def multi_checker(entity):
     # add BBB
     # add good shopping guide 
@@ -227,8 +245,9 @@ def multi_checker(entity):
     b_corps_listed = b_corps_checker(entity)
     wikipedia_listed = wikipedia_checker(entity)
     bank_track_listed = bank_track_checker(entity)
+    gabv_listed = gabv_checker(entity)
 
-    if good_on_you_listed == False and b_corps_listed == False and wikipedia_listed == False and bank_track_listed == False:
+    if good_on_you_listed == False and b_corps_listed == False and wikipedia_listed == False and bank_track_listed == False and gabv_listed == False:
         return False
     else:
         return True
@@ -245,15 +264,17 @@ def ethics_query(entity):
     entity_llc = entity + '-l-l-c'
     entity_underscores = entity.replace("-", "_")
     entity_spaces = entity.replace("-", "%20")
-    print("🌀 checking name variants")
+    entity_nospaces = entity.replace("-", "")
 
     entity_inc_found = multi_checker(entity_inc)
+    print("🌀 checking name variants")
     entity_ltd_found = multi_checker(entity_ltd)
     print("⏳ still checking")
     entity_llc_found = multi_checker(entity_llc)
-    #if entity != entity.replace("-", ""):
-    #    entity_underscores_found = multi_checker(entity_underscores)
-    #    entity_spaces_found = multi_checker(entity_spaces)
+    if entity != entity_nospaces:
+        entity_underscores_found = multi_checker(entity_underscores)
+        entity_spaces_found = multi_checker(entity_spaces)
+        entity_nospaces_found = multi_checker(entity_nospaces)
 
     #check for variants like with inc at the end?
     print("🔎 nothing else found")
