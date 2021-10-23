@@ -165,6 +165,7 @@ def ewg_skindeep(entity):
     return ewg_listed
 """
 
+"""
 def bank_green_checker(entity):
     entity_underscores = entity.replace("-", "_")
     url = "https://bank.green/banks/" + entity_underscores
@@ -184,6 +185,37 @@ def bank_green_checker(entity):
         rating = text[rating_index: rating_index + 7]
         print("🏦 bank.green lists this as " + rating)
     return listed
+"""
+
+
+def bank_track_checker(entity):
+    entity = entity.replace("-", "_")
+
+    company_url = "https://www.banktrack.org/company/" + entity
+    bank_url = "https://www.banktrack.org/bank/" + entity
+
+    company_response = requests.get(company_url)
+    bank_response = requests.get(bank_url)
+
+    ## parse page text
+    company_response_parsed = BeautifulSoup(company_response.text, 'html.parser')
+    bank_response_parsed = BeautifulSoup(bank_response.text, 'html.parser')
+    ## get cleaner text
+    company_text = company_response_parsed.get_text()
+    bank_text = bank_response_parsed.get_text()
+
+    notfound = re.compile("404")
+    if notfound.search(company_text) != None and notfound.search(bank_text) != None:
+        listed = False
+    elif notfound.search(company_text) == None and notfound.search(bank_text) != None:
+        listed = True
+        print("👀 found BankTrack entry at " + company_url)
+    elif notfound.search(company_text) != None and notfound.search(bank_text) == None:
+        listed = True
+        print("👀 found BankTrack entry at " + bank_url)
+        # could try to extract impact description from pdfs because addresses seem standardized
+        # example: https://www.banktrack.org/company/bunge/pdf
+    return listed
 
 def multi_checker(entity):
     # add BBB
@@ -194,11 +226,14 @@ def multi_checker(entity):
     good_on_you_listed = good_on_you_checker(entity)
     b_corps_listed = b_corps_checker(entity)
     wikipedia_listed = wikipedia_checker(entity)
+    bank_track_listed = bank_track_checker(entity)
 
-    if good_on_you_listed == False and b_corps_listed == False and wikipedia_listed == False:
+    if good_on_you_listed == False and b_corps_listed == False and wikipedia_listed == False and bank_track_listed == False:
         return False
+    else:
+        return True
 
-def ethics_info(entity):
+def ethics_query(entity):
 
     entity = standardize_entity(entity)
     entity_found = multi_checker(entity)
@@ -216,9 +251,9 @@ def ethics_info(entity):
     entity_ltd_found = multi_checker(entity_ltd)
     print("⏳ still checking")
     entity_llc_found = multi_checker(entity_llc)
-    if entity != entity.replace("-", ""):
-        entity_underscores_found = multi_checker(entity_underscores)
-        entity_spaces_found = multi_checker(entity_spaces)
+    #if entity != entity.replace("-", ""):
+    #    entity_underscores_found = multi_checker(entity_underscores)
+    #    entity_spaces_found = multi_checker(entity_spaces)
 
     #check for variants like with inc at the end?
     print("🔎 nothing else found")
