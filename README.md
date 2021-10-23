@@ -1,12 +1,12 @@
-# ethics-query
+# ethics query 🔎
  
-This Python function takes the name of an entity, such as a brand, and pulls ethics information from webpages with matching names.
+This Python function takes the name of an entity, such as a brand, and prints English-language ethics information from webpages with matching names.
 
 Sites it currently checks
-- Good on You
-- Wikipedia
-- B Corp
+- [Good on You](https://directory.goodonyou.eco/)
+- [Wikipedia](https://en.wikipedia.org/)
+- [B Corp](https://bcorporation.net/directory)
 
-Sites it could potentially check
-- 1% for the Planet
-- Bank Green
+Sites that could be used but are harder to analyze due to JavaScript use
+- [1% for the Planet](https://directories.onepercentfortheplanet.org/)
+- [Bank Green](https://bank.green/)
