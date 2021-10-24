@@ -19,6 +19,12 @@ This Python function takes the name of an entity, such as a brand, and prints En
 - [Bank Green](https://bank.green/)
 - [The Good Shopping Guide](https://thegoodshoppingguide.com)
 
+### Sites that could presumably be added in the future
+- [Climate Friendly Supermarkets](https://www.climatefriendlysupermarkets.org/scorecard)
+- [CSRHub](https://www.csrhub.com/csrhub-restful-api), which is conceptually similar to this project but caters more to corporate actors than consumers and seems lacking in terms of design, transparency, accessibility, and respect for user privacy
+- [WWF Palm Oil Buyers Scorecard](http://palmoilscorecard.panda.org/#/scores)
+- EWG [Skin Deep](https://www.ewg.org/skindeep/) and [Foodscores](https://www.ewg.org/foodscores/)
+- [Open Food Facts](https://fr-en.openfoodfacts.org/data)
 For nonprofits, info from ProPublica Nonprofit Explorer, Guidestar, and Charity Navigator could be added. This data is organized by Employer Identification Number (EIN), so a separate function may be appropriate.
 
 ## Example
