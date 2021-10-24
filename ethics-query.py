@@ -193,7 +193,6 @@ def ethics_query(entity, is_bank = False, is_fashion = False):
 
     entity_list = [entity_inc, entity_ltd, entity_llc, entity_underscores, entity_spaces, entity_nospaces, entity_lower]
     entity_list = list(set(entity_list))
-    print(len(entity_list))
 
     b_corps_listed = "idk"
     i = 0
@@ -202,11 +201,9 @@ def ethics_query(entity, is_bank = False, is_fashion = False):
         if b_corps_checker(entity_list[i]):
             b_corps_listed = "True"
         i += 1
-    print("...")
+
     wikipedia_listed = "idk"
     i = 0
-
-    print("⏳ still checking")
 
     while wikipedia_listed == "idk" and i < len(entity_list):
         if wikipedia_checker(entity_list[i]):
