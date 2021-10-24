@@ -4,21 +4,19 @@ from bs4 import BeautifulSoup
 
 def standardize_entity(entity):
     """
-    returns a entity string with lowercase letters and dashes instead of spaces and prints the altered version
+    returns an entity string with dashes instead of spaces and prints the altered version
     >>> standardize_entity("The North Face")
 
     """
     entity = str(entity)
     # replace spaces with dashes
     entity = entity.replace(' ', '-')
-    ## make entity lowercase
     #replace spaces with -?
 
     print("👍 accepted " + entity + " as entity to query")
     return entity
 
 def good_on_you_checker(entity):
-    entity = entity.lower()
     good_on_you_url = 'https://directory.goodonyou.eco/brand/' + entity
     ## get response from Good On You URL
     good_on_you_response = requests.get(good_on_you_url)
@@ -164,24 +162,41 @@ def gabv_checker(entity):
         print("👀 listed as a member of the Global Alliance for Banking on Values at " + url)
     return listed
 
+def ethical_consumer_checker(entity):
+    url = "https://www.ethicalconsumer.org/company-profile/" + entity
+    response = requests.get(url)
+    ## parse page text
+    response_parsed = BeautifulSoup(response.text, 'html.parser')
+    ## get cleaner text
+    text = response_parsed.get_text()
+    notfound = re.compile("Not Found")
+    if notfound.search(text) != None:
+        listed = False
+    elif notfound.search(text) == None:
+        listed = True
+        print("👀 has a page on Ethical Consumer at " + url)
+    return listed
 
 
-def multi_checker(entity):
-    # add BBB
-    # add banking info
-    # for nonprofits, could add ProPublica Nonprofit Explorer, Guidestar, Charity Navigator
-    good_on_you_listed = good_on_you_checker(entity)
-    b_corps_listed = b_corps_checker(entity)
-    wikipedia_listed = wikipedia_checker(entity)
-    bank_track_listed = bank_track_checker(entity)
-    gabv_listed = gabv_checker(entity)
 
-    if good_on_you_listed == False and b_corps_listed == False and wikipedia_listed == False and bank_track_listed == False and gabv_listed == False:
-        return False
-    else:
-        return True
 
-def ethics_query(entity):
+def ethics_query(entity, is_bank = False, is_fashion = False):
+
+    def multi_checker(entity):
+        b_corps_checker(entity)
+        wikipedia_checker(entity)
+        ethical_consumer_checker(entity)
+        
+        if is_bank == True and is_fashion == True:
+            bank_track_checker(entity)
+            gabv_checker(entity)
+            good_on_you_checker(entity)
+        elif is_bank == True and is_fashion == False:
+            bank_track_checker(entity)
+            gabv_checker(entity)
+        elif is_bank == False and is_fashion == True:
+            good_on_you_checker(entity)
+
 
     entity = standardize_entity(entity)
     entity_found = multi_checker(entity)
@@ -194,16 +209,19 @@ def ethics_query(entity):
     entity_underscores = entity.replace("-", "_")
     entity_spaces = entity.replace("-", "%20")
     entity_nospaces = entity.replace("-", "")
+    entity_lower = entity.lower()
 
-    entity_inc_found = multi_checker(entity_inc)
     print("🌀 checking name variants")
-    entity_ltd_found = multi_checker(entity_ltd)
+    multi_checker(entity_inc)
+    multi_checker(entity_ltd)
     print("⏳ still checking")
-    entity_llc_found = multi_checker(entity_llc)
+    multi_checker(entity_llc)
+    print("🐢 still checking")
+    multi_checker(entity_lower)
     if entity != entity_nospaces:
-        entity_underscores_found = multi_checker(entity_underscores)
-        entity_spaces_found = multi_checker(entity_spaces)
-        entity_nospaces_found = multi_checker(entity_nospaces)
+        multi_checker(entity_underscores)
+        multi_checker(entity_spaces)
+        multi_checker(entity_nospaces)
 
     #check for variants like with inc at the end?
     print("🔎 nothing else found")
