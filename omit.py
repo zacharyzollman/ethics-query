@@ -1,4 +1,53 @@
 """
+def ethics_query0(entity, is_bank = False, is_fashion = False):
+
+    def multi_checker(entity):
+        b_corps_checker(entity)
+        wikipedia_checker(entity)
+        ethical_consumer_checker(entity)
+        
+        if is_bank == True and is_fashion == True:
+            bank_track_checker(entity)
+            gabv_checker(entity)
+            good_on_you_checker(entity)
+        elif is_bank == True and is_fashion == False:
+            bank_track_checker(entity)
+            gabv_checker(entity)
+        elif is_bank == False and is_fashion == True:
+            good_on_you_checker(entity)
+
+
+    entity = standardize_entity(entity)
+    entity_found = multi_checker(entity)
+    if entity_found == False:
+        print("🔎 nothing so far...")
+    
+    entity_inc = entity + '-inc'
+    entity_ltd = entity + '-ltd'
+    entity_llc = entity + '-l-l-c'
+    entity_underscores = entity.replace("-", "_")
+    entity_spaces = entity.replace("-", "%20")
+    entity_nospaces = entity.replace("-", "")
+    entity_lower = entity.lower()
+
+    print("🌀 checking name variants")
+    multi_checker(entity_inc)
+    multi_checker(entity_ltd)
+    print("⏳ still checking")
+    multi_checker(entity_llc)
+    print("🐢 still checking")
+    multi_checker(entity_lower)
+    if entity != entity_nospaces:
+        multi_checker(entity_underscores)
+        multi_checker(entity_spaces)
+        multi_checker(entity_nospaces)
+
+    #check for variants like with inc at the end?
+    print("🔎 nothing else found")
+"""
+
+
+"""
 def good_shopping_guide_checker(entity):
     url_list = ["https://thegoodshoppingguide.com/subject/printers/"]
     listed = False

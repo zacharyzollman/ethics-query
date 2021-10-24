@@ -179,30 +179,10 @@ def ethical_consumer_checker(entity):
 
 
 
-
 def ethics_query(entity, is_bank = False, is_fashion = False):
 
-    def multi_checker(entity):
-        b_corps_checker(entity)
-        wikipedia_checker(entity)
-        ethical_consumer_checker(entity)
-        
-        if is_bank == True and is_fashion == True:
-            bank_track_checker(entity)
-            gabv_checker(entity)
-            good_on_you_checker(entity)
-        elif is_bank == True and is_fashion == False:
-            bank_track_checker(entity)
-            gabv_checker(entity)
-        elif is_bank == False and is_fashion == True:
-            good_on_you_checker(entity)
-
-
     entity = standardize_entity(entity)
-    entity_found = multi_checker(entity)
-    if entity_found == False:
-        print("🔎 nothing so far...")
-    
+
     entity_inc = entity + '-inc'
     entity_ltd = entity + '-ltd'
     entity_llc = entity + '-l-l-c'
@@ -211,23 +191,81 @@ def ethics_query(entity, is_bank = False, is_fashion = False):
     entity_nospaces = entity.replace("-", "")
     entity_lower = entity.lower()
 
-    print("🌀 checking name variants")
-    multi_checker(entity_inc)
-    multi_checker(entity_ltd)
+    entity_list = [entity_inc, entity_ltd, entity_llc, entity_underscores, entity_spaces, entity_nospaces, entity_lower]
+    entity_list = list(set(entity_list))
+    print(len(entity_list))
+
+    b_corps_listed = "idk"
+    i = 0
+
+    while b_corps_listed == "idk" and i < len(entity_list):
+        if b_corps_checker(entity_list[i]):
+            b_corps_listed = "True"
+        i += 1
+    print("...")
+    wikipedia_listed = "idk"
+    i = 0
+
     print("⏳ still checking")
-    multi_checker(entity_llc)
+
+    while wikipedia_listed == "idk" and i < len(entity_list):
+        if wikipedia_checker(entity_list[i]):
+            wikipedia_listed = True
+        elif i == (len(entity_list) - 1) and wikipedia_listed == "idk":
+            wikipedia_listed == False
+        i += 1
+    
     print("🐢 still checking")
-    multi_checker(entity_lower)
-    if entity != entity_nospaces:
-        multi_checker(entity_underscores)
-        multi_checker(entity_spaces)
-        multi_checker(entity_nospaces)
+    
+    ethical_consumer_listed = "idk"
+    i = 0
 
-    #check for variants like with inc at the end?
-    print("🔎 nothing else found")
+    while ethical_consumer_listed == "idk" and i < len(entity_list):
+        if wikipedia_checker(entity_list[i]):
+            ethical_consumer_listed = True
+        elif i == (len(entity_list) - 1) and ethical_consumer_listed == "idk":
+            ethical_consumer_listed == False
+        i += 1
+        
+    if is_bank == True:
+        
+        bank_track_listed = "idk"
+        i = 0
 
+        while bank_track_listed == "idk" and i < len(entity_list):
+            if b_corps_checker(entity_list[i]):
+                bank_track_listed = True
+            elif i == (len(entity_list) - 1) and bank_track_listed == "idk":
+                bank_track_listed == False
+            i += 1
+
+        gabv_listed = "idk"
+        i = 0
+
+        while gabv_listed == "idk" and i < len(entity_list):
+            if gabv_checker(entity_list[i]):
+                gabv_listed = True
+            elif i == (len(entity_list) - 1) and gabv_listed == "idk":
+                gabv_listed == False
+            i += 1
+
+    elif is_fashion == True:
+
+        good_on_you_listed = "idk"
+        i = 0
+
+        while good_on_you_listed == "idk" and i < len(entity_list):
+            if good_on_you_checker(entity_list[i]):
+                good_on_you_listed = True
+            elif i == (len(entity_list) - 1) and good_on_you_listed == "idk":
+                good_on_you_listed == False
+            i += 1
+
+   
     # could add variant with dashes between capitalized consecutive letters 
     # because B Corps seems to do this for initialisms
     # for example NAAK INC becomes https://bcorporation.net/directory/n-a-a-k-i-n-c
     # could also remove periods because B Corps seems to do this
     # like for dev.f they have https://bcorporation.net/directory/devf
+
+    print("🔎 search complete")
