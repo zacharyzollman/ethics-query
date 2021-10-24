@@ -191,25 +191,26 @@ def ethics_query(entity, is_bank = False, is_fashion = False):
     entity_nospaces = entity.replace("-", "")
     entity_lower = entity.lower()
 
-    entity_list = [entity_inc, entity_ltd, entity_llc, entity_underscores, entity_spaces, entity_nospaces, entity_lower]
+    entity_list = [entity_inc, entity_ltd, entity_llc, entity_spaces, entity_underscores, entity_nospaces, entity_lower]
     entity_list = list(set(entity_list))
 
-    b_corps_listed = "idk"
+    b_corps_listed = 0
     i = 0
 
-    while b_corps_listed == "idk" and i < len(entity_list):
-        if b_corps_checker(entity_list[i]):
-            b_corps_listed = "True"
+    while b_corps_listed == 0 and i < len(entity_list):
+        if b_corps_checker(entity_list[i]) == True:
+            b_corps_listed += 1
         i += 1
 
-    wikipedia_listed = "idk"
+    wikipedia_listed = 0
     i = 0
 
-    while wikipedia_listed == "idk" and i < len(entity_list):
-        if wikipedia_checker(entity_list[i]):
-            wikipedia_listed = True
-        elif i == (len(entity_list) - 1) and wikipedia_listed == "idk":
-            wikipedia_listed == False
+    while wikipedia_listed == 0 and i < len(entity_list):
+        present = wikipedia_checker(entity_list[i])
+        if present == True:
+            wikipedia_listed += 1
+        elif i == (len(entity_list) - 1) and present == False:
+            wikipedia_listed -= 1
         i += 1
     
     print("🐢 still checking")
