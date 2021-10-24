@@ -19,7 +19,7 @@ This Python function takes the name of an entity, such as a brand, and prints En
 - [Bank Green](https://bank.green/)
 - [The Good Shopping Guide](https://thegoodshoppingguide.com)
 
-For nonprofits, info from ProPublica Nonprofit Explorer, Guidestar, and Charity Navigator could be added.
+For nonprofits, info from ProPublica Nonprofit Explorer, Guidestar, and Charity Navigator could be added. This data is organized by Employer Identification Number (EIN), so a separate function may be appropriate.
 
 ## Example
 
