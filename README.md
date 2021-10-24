@@ -12,3 +12,4 @@ Sites it currently checks
 Sites that could be used but are harder to analyze due to JavaScript use
 - [1% for the Planet](https://directories.onepercentfortheplanet.org/)
 - [Bank Green](https://bank.green/)
+- [The Good Shopping Guide](https://thegoodshoppingguide.com)
