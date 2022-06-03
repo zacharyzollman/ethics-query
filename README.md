@@ -31,6 +31,8 @@ This Python function takes the name of an entity, such as a brand, and prints En
 - [Food and Water Watch](https://www.foodandwaterwatch.org/pdf-research-directory/) data
 - [Common Objective](https://www.commonobjective.co/search/organisations)
 - [Waste Not](https://wastenot.world/)
+- [Fashion Checker](https://fashionchecker.org/)
+- [Wikirate](https://wikirate.org/)
 
 For nonprofits, info from ProPublica Nonprofit Explorer, Guidestar, and Charity Navigator could be added. This data is organized by Employer Identification Number (EIN), so a separate function may be appropriate.
 Additionally, the code could be modified so that results appear gradually rather than all at once.
